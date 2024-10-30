@@ -15,12 +15,6 @@ class Player {
         this.dashStrength = 30; //Also improved.
         this.tpCooldown = 1;
         this.tpDelay = 0;
-        this.shootType = 0;
-        this.shootTypeList = ["default", "accelerate", "shotgun", "minigun", "railgun"];
-        this.shots = 5;
-        this.accuracy = 15;
-        this.bullets = 1000000000000;
-        this.shootDelay = 0;
     }
     dash() {
         if (this.dashCooldown == this.dashDelay && this.isDashing == false && (this.xvelo != 0 || this.yvelo != 0)) {
@@ -126,19 +120,6 @@ class Player {
             this.tpCooldown = 0;
             this.x = mousex;
             this.y = mousey;
-        }
-    }
-    shoot() {
-        if (clicking) {
-            if (player.shootDelay == 0 && player.bullets>0) {
-                player.bullets--;
-                let spread = this.accuracy;
-                if (pKey[0] || pKey[1] || pKey[2] || pKey[3]) {
-                    spread/=2.5;
-                }
-                let angle = Math.atan2(mousey - player.y,mousex - player.x);
-                projManager.createProjectile(player.x, player.y, angle, 0, 30, 20, this.shootTypeList[this.shootType],10, this.shots, spread);
-            }
         }
     }
 }

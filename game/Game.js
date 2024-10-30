@@ -9,7 +9,6 @@
 
 const player = new Player(50, 50);
 const map = new Map();
-const projManager = new ProjectileManager();
 
 function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
@@ -25,7 +24,5 @@ function updateScreen() {
     ctx.fillStyle = player.color;
     ctx.fillRect(player.x - (player.size / 2), player.y - (player.size / 2), player.size, player.size);
     player.move();
-    player.shoot();
-    projManager.updateProjectiles();
     drawUI();
 }

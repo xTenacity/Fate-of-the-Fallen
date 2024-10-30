@@ -38,10 +38,5 @@ document.addEventListener('DOMContentLoaded', function() { //load everything
 
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);
-    window.addEventListener('mousedown',mousedown);
-    window.addEventListener('mouseup',mouseup);
-    window.addEventListener('mousemove',mousemove);
     requestAnimationFrame(gameLoop);
-    
-    document.body.style.cursor = 'none';
 });
