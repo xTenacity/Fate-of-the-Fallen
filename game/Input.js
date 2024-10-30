@@ -18,6 +18,24 @@ function checkInput(key, event) {
         if (key == "e") {
             player.tp();
         }
+        if (key == "t") {
+            if (player.shootType < player.shootTypeList.length-1) {
+                player.shootType++;
+            } else {
+                player.shootType = 0;
+            }
+        }
+        if (key == "=") {
+            player.shots++;
+        }
+        if (key == "-") {
+            if (player.shots>1) {
+                player.shots--;
+            }
+        }
+        if (key == "r") {
+            player.bullets=100;
+        }
     } else {
         if (key == "w") { //up
             pKey[0] = false;
@@ -38,4 +56,14 @@ function keydown(event) {
 }
 function keyup(event) {
     checkInput(event.key, "up");
+}
+function mousemove(event) {
+    mousex = event.clientX;
+    mousey = event.clientY;
+}
+function mousedown(event) {
+    clicking = true;
+}
+function mouseup(event) {
+    clicking = false;
 }
