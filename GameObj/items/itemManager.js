@@ -108,8 +108,8 @@ class ItemManager {
     }
     cursorBomb(bulletSpeed, i, cItem) {
         projManager.createProjectile( 
-            mousex,
-            mousey,
+            mousex+camera.x,
+            mousey+camera.y,
             i*(Math.PI / 180),
             cItem.color,
             cItem.spread, 
