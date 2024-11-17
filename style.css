@@ -1,9 +1,19 @@
 html {
   height: 100%;
   width: 100%;
-}
-
-body {
   background-color: black;
-  color: white;
+}
+body {
+         width: 100%;
+         height: 100%;
+         overflow: hidden;
+         display: block;
+      }
+
+canvas {
+  /* all four are needed to support the most browsers */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }

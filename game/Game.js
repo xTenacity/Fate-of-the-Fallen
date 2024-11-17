@@ -1,31 +1,34 @@
-/*
-0 - empty
-1 - red block
-2 - blue block
-3 - green block
-4 - yellow block
-5 - controlled block
-*/
-
-const player = new Player(50, 50);
+const player = new Player(200, 200);
 const map = new Map();
 const projManager = new ProjectileManager();
+const itemManager = new ItemManager();
+const camera = new Camera();
+
+fetch("GameObj/items/items.json")
+.then(response => response.json())
+.then(data => {
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Pistol"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Rune Save"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Shotgun"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Singularity Rail Cannon"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Aquagun"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Holy Striker"));
+    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Eviscerator"));
+    itemManager.addItem(data.weapons.guns.find(item => item.name === "andrew killa"));
+    itemManager.addItem(data.weapons.guns.find(item => item.name === "pulse bomb"));
+})
+.catch(error => console.error("Error loading item data:", error));
 
 function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
     if (currentTime - lastFrameTime >= (1000/fps)) {
         lastFrameTime = currentTime;
-        updateScreen(currentTime);
+        updateScreen();
     }
 }
 
 function updateScreen() {
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = player.color;
-    ctx.fillRect(player.x - (player.size / 2), player.y - (player.size / 2), player.size, player.size);
     player.move();
-    player.shoot();
     projManager.updateProjectiles();
-    drawUI();
+    render();
 }

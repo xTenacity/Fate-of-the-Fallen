@@ -1,5 +1,7 @@
 class Map {
-    constructor(width, height, rooms) { //width, height, list of lists of rooms
+    constructor(width, height) { //width, height, list of lists of rooms
+        this.width = width;
+        this.height = height;
         this.rooms = {};
     }
 }

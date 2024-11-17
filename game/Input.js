@@ -12,30 +12,29 @@ function checkInput(key, event) {
         if (key == "d") { //right
             pKey[3] = true;
         }
-        if (key == " ") {
+        if (key == "shift") {
             player.dash();
         }
         if (key == "e") {
             player.tp();
         }
         if (key == "t") {
-            if (player.shootType < player.shootTypeList.length-1) {
-                player.shootType++;
-            } else {
-                player.shootType = 0;
-            }
-        }
-        if (key == "=") {
-            player.shots++;
-        }
-        if (key == "-") {
-            if (player.shots>1) {
-                player.shots--;
-            }
+            itemManager.nextItem();
         }
         if (key == "r") {
-            player.bullets=100;
+            itemManager.reload();
         }
+        if (key == "p") {
+            camPos = "cursor";
+        }
+        //needs to be refactored
+        /*
+        if (key == "-") {
+            camera.zoom-=0.5;
+        }
+        if (key == "=") {
+            camera.zoom+=0.5;
+        }*/
     } else {
         if (key == "w") { //up
             pKey[0] = false;
@@ -49,13 +48,16 @@ function checkInput(key, event) {
         if (key == "d") { //right
             pKey[3] = false;
         }
+        if (key == "p") {
+            camPos = "player";
+        }
     }
 }
 function keydown(event) {
-    checkInput(event.key, "down");
+    checkInput(event.key.toLowerCase(), "down");
 }
 function keyup(event) {
-    checkInput(event.key, "up");
+    checkInput(event.key.toLowerCase(), "up");
 }
 function mousemove(event) {
     mousex = event.clientX;
