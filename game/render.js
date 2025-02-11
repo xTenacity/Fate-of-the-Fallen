@@ -55,38 +55,170 @@ function drawPlayer() {
 
 function drawProjectiles() {
     for (let projectile in projManager.projectiles) {
+        ctx.save();
         let proj = projManager.projectiles[projectile];
         ctx.fillStyle = proj.color;
-        ctx.fillRect(
-            proj.x - camera.x - (proj.size*camera.zoom) / 2,
-            proj.y - camera.y - (proj.size*camera.zoom) / 2,
-            proj.size*camera.zoom,
-            proj.size*camera.zoom
-        );
-        projectileTrail(proj);
-    }
-;}
+        ctx.translate(proj.x - camera.x, proj.y - camera.y);
+        ctx.rotate(proj.dir);
 
-function projectileTrail(proj) {
-    let projectileAlpha = 1;
-    for (let i = 1; i < 10; i++) {
-        ctx.fillStyle = proj.color;
-        hex = ctx.fillStyle.replace(/^#/, '');
-        let bigint = parseInt(hex, 16);
-        let r = (bigint >> 16) & 255;
-        let g = (bigint >> 8) & 255;
-        let b = bigint & 255;
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${projectileAlpha})`;
-        ctx.fillRect(
-            proj.x - 0.5*proj.speed*Math.cos(proj.dir)*(i/4) - camera.x - (proj.size*camera.zoom) / 2,
-            proj.y - 0.5*proj.speed*Math.sin(proj.dir)*(i/4) - camera.y - (proj.size*camera.zoom) / 2,
-            proj.size*camera.zoom,
-            proj.size*camera.zoom
-        );
-        projectileAlpha *= 0.7; // Control the fade between segments
+        switch(proj.ammo) {
+            case "default":
+                ctx.fillRect(
+                    0,
+                    0,
+                    proj.size * camera.zoom,
+                    proj.size * camera.zoom
+                );
+                break;
+            case "circle":
+                ctx.beginPath();
+                ctx.arc(
+                    0, // Center the circle at the projectile's position
+                    0, // Center the circle at the projectile's position
+                    proj.size * camera.zoom / 2, // Radius of the circle
+                    0,                           // Start angle
+                    2 * Math.PI                  // End angle
+                );
+                ctx.fill();
+                break;
+            case "blur": 
+                projectileTrail(proj);
+                break;
+        }
+        let cItem = itemManager.items[itemManager.currentItem];
+        if (cItem.fx != null) {
+            if (Array.isArray(cItem.fx)) {
+                if (cItem.fx.includes("blur")) projectileTrail(proj);
+            } else {
+                if (cItem.fx == ("blur")) projectileTrail(proj);
+            }
+        }
+        ctx.restore();
     }
 }
 
+function projectileTrail(proj) {
+    let projAlpha = 1.0;
+    const trailSegments = 5; // Number of trail segments
+    const trailLength = proj.speed * 0.5; // Adjust for longer trails
+
+    for (let i = 0; i < trailSegments; i++) {
+        // Calculate offsets based on direction and segment
+        const offsetX = trailLength * (i / trailSegments);
+
+        ctx.save(); // Save the current canvas state
+        ctx.translate(-offsetX, 0);
+        
+        ctx.fillStyle = proj.color;
+        let bigint = parseInt(ctx.fillStyle.replace(/^#/, ''), 16);
+        ctx.fillStyle = `rgba(
+            ${(bigint >> 16) & 255},
+            ${(bigint >> 8) & 255}, 
+            ${bigint & 255}, 
+            ${projAlpha}
+        )`;
+
+        if (proj.ammo == "default") {
+            ctx.fillRect(
+                0,
+                0,
+                proj.size * camera.zoom,
+                proj.size * camera.zoom
+            );
+        } else if (proj.ammo == "circle") {
+            ctx.beginPath();
+            ctx.arc(
+                0,
+                0,
+                proj.size * camera.zoom / 2, // Radius of the circle
+                0,                           // Start angle
+                2 * Math.PI                  // End angle
+            );
+            ctx.fill();
+        }
+        projAlpha *= 0.7; // Fade between trail segments
+        ctx.restore();
+    }
+}
+
+function drawSlashes() {
+    for (let s of slashManager.slashes) {
+        ctx.save();
+
+        ctx.translate(player.x - camera.x, player.y - camera.y);
+        ctx.rotate(s.currentAngle);
+
+
+        drawSwingTrail(s);
+
+        // Draw the slash blade
+        ctx.fillStyle = s.color;
+        const bladeLength = s.size * 10; // Adjust blade length
+        const bladeWidth = 10 * camera.zoom; // Adjust blade width
+        ctx.fillRect(
+            0,                 // Start at arc's tip
+            -bladeWidth / 2,   // Center the blade vertically
+            bladeLength,       // Length of the blade
+            bladeWidth         // Thickness of the blade
+        );
+
+
+
+        ctx.restore();
+    }
+}
+
+function drawSwingTrail(s) {
+    let slashAlpha = 0.9;
+    const trailSegments = 10; // Number of trail segments
+    const trailLength = 2;
+
+    for (let i = 0; i < trailSegments; i++) {
+        ctx.save(); // Save the current canvas state
+        
+        const trailAngle = (i * trailLength * s.speed); // Spread trail behind currentAngle
+        const arcRadius = 10 * s.size * camera.zoom; // Size of the arc
+        
+        ctx.fillStyle = s.color;
+        let bigint = parseInt(ctx.fillStyle.replace(/^#/, ''), 16);
+        ctx.fillStyle = `rgba(
+            ${(bigint >> 16) & 255},
+            ${(bigint >> 8) & 255}, 
+            ${bigint & 255}, 
+            ${slashAlpha}
+        )`;
+
+
+        if (s.side == "left") {
+            ctx.beginPath();
+            ctx.arc(
+                0,
+                0,
+                arcRadius,
+                -(0.1*trailAngle),
+                0,
+            );
+        } else if (s.side == "right") {
+            ctx.beginPath();
+            ctx.arc(
+                0,
+                0,
+                arcRadius,
+                0,
+                (0.1*trailAngle)
+            );
+        }
+        ctx.lineTo(0,0);
+
+        ctx.fill();
+
+
+
+
+        slashAlpha*=0.9;
+        ctx.restore();
+    }
+}
 
 function drawFadingTrail() {
     // Start with a high alpha and decrease it
@@ -135,6 +267,7 @@ function render() {
     drawBG();
     drawGrid();
     drawProjectiles();
+    drawSlashes();
     drawPlayer();
     drawUI();
     drawCrosshair();

@@ -19,6 +19,8 @@ class ItemManager {
     useItem() {
         if (this.getType() == "Gun") {
             this.shoot(player.x, player.y);
+        } else if (this.getType() == "Sword") {
+            this.slash(player.x, player.y);
         }
     }
 
@@ -34,7 +36,22 @@ class ItemManager {
         return this.items[this.currentItem].type;
     }
     
+    
+    slash(x, y) {
+        let cItem = this.items[this.currentItem];
+        if (clicking && this.itemCooldown == 0) {
+            let attack = cItem.attacks[cItem.cStage];
+            this.itemCooldown = attack.delay;
+            let angle = Math.atan2(mousey+camera.y - y, mousex+camera.x - x);
+            slashManager.createSlash(x,y,angle,attack.side,attack.color,cItem.swingSpeed,attack.size);
 
+            if (cItem.cStage < cItem.attacks.length - 1) {
+                cItem.cStage++;
+            } else {
+                cItem.cStage = 0;
+            }
+        }
+    }
 //GUN SPECIFIC METHODS
     getBullets() {
         return this.items[this.currentItem].bullets;
@@ -63,121 +80,95 @@ class ItemManager {
 
             //create bullets
             this.createBullet(x, y, angle);
-        }
+        } 
     }
     createBullet(x, y, angle) {
         let cItem = this.items[this.currentItem];
 
-        var audio = new Audio("GameObj/items/sounds/" + cItem.shootSfx + "mp3");
-        audio.play();
-        
-        //create rest of bullets
-        for (let i = 0; i < cItem.bulletsPerShot; i++) {
-            let bulletSpeed = cItem.bulletSpeed + (cItem.bulletDelay ? i : 0);
+        /*var audio = new Audio("GameObj/items/sounds/" + cItem.shootSfx + ".mp3");
+        audio.play();*/
 
+        if (cItem.fx) {
+            const fxList = Array.isArray(cItem.fx) ? cItem.fx : [cItem.fx]; // Ensure fx is an array
+            for (let i = 0; i < cItem.bulletsPerShot; i++) {
+                let bulletSpeed = cItem.bulletSpeed + (cItem.bulletDelay ? i : 0);
+                let effectApplied = false;
 
-            if (cItem.fx == "colorchange") { //colorchange
-                this.colorChangeBullet(x,y,angle,bulletSpeed,i%2, cItem);
+                let bulletX = x - (cItem.bulletSize/2);
+                let bulletY = y - (cItem.bulletSize/2);
+                let bulletAngle = angle;
+                let colorchange = false;
 
-            } else if (cItem.fx > 0 || cItem.fx < 0) { //if its a number
-                this.posBullet(x,y,angle,bulletSpeed, i, cItem.fx, cItem);
+                /*if (effect == "colorchange")*/
+                for (let effect of fxList) {
+                    if (effect == "cursor") {
+                        bulletX = mousex + camera.x;
+                        bulletY = mousey + camera.y;
+                        effectApplied = true;
+                    } if (!isNaN(effect)) { 
+                        const backwardX = bulletX - effect * Math.cos(bulletAngle + Math.PI);
+                        const backwardY = bulletY - effect * Math.sin(bulletAngle + Math.PI);
+                        const spreadFactor = (i % 2 == 0 ? 1 : -1); // Alternate sides
+                        const offsetX = 10 * (Math.round(i/2)*2 + Math.round(Math.abs(effect)/25)) * spreadFactor * Math.cos(bulletAngle + Math.PI / 2);
+                        const offsetY = 10 * (Math.round(i/2)*2 + Math.round(Math.abs(effect)/25)) * spreadFactor * Math.sin(bulletAngle + Math.PI / 2);
 
-
-            } else if (cItem.fx == "random") {
-                this.randBullet(bulletSpeed, cItem);
-
-            } else if (cItem.fx == "cursorbomb") {
-                this.cursorBomb(bulletSpeed, i, cItem);
-
-
-            } else { //default
+                        bulletX = backwardX + offsetX;
+                        bulletY = backwardY + offsetY;
+                        bulletAngle = Math.atan2(mousey+camera.y - bulletY, mousex+camera.x - bulletX);
+                        effectApplied = true;
+                    } else if (effect == "random") {
+                        bulletX = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + x;
+                        bulletY = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + y;
+                        bulletAngle = Math.atan2(mousey+camera.y - bullety, mousex+camera.x - bulletX);
+                        effectApplied = true;
+                    } else if (effect == "colorchange") {
+                        colorchange = true;
+                    }
+                }
+                if (colorchange) {
+                    projManager.createProjectile(
+                        bulletX,
+                        bulletY,
+                        bulletAngle,
+                        ((i%2==0) ? cItem.color2 : cItem.color),
+                        cItem.spread,
+                        cItem.lifespan,
+                        cItem.bulletSize,
+                        bulletSpeed,
+                        cItem.bulletsPerShot,
+                        cItem.acceleration
+                    );
+                } else {
+                    projManager.createProjectile(
+                        bulletX,
+                        bulletY,
+                        bulletAngle,
+                        cItem.color,
+                        cItem.spread,
+                        cItem.lifespan,
+                        cItem.bulletSize,
+                        bulletSpeed,
+                        cItem.bulletsPerShot,
+                        cItem.acceleration
+                    );
+                }
+            }
+        } else { 
+            for (let i = 0; i < cItem.bulletsPerShot; i++) {
+                let bulletSpeed = cItem.bulletSpeed + (cItem.bulletDelay ? i : 0);
                 projManager.createProjectile(
-                    x, 
-                    y, 
-                    angle, 
-                    cItem.color, 
-                    cItem.spread, 
-                    cItem.lifespan, 
-                    cItem.bulletSize, 
-                    bulletSpeed, 
-                    cItem.bulletsPerShot, 
+                    x,
+                    y,
+                    angle,
+                    cItem.color,
+                    cItem.spread,
+                    cItem.lifespan,
+                    cItem.bulletSize,
+                    bulletSpeed,
+                    cItem.bulletsPerShot,
                     cItem.acceleration
                 );
             }
         }
-    }
-    cursorBomb(bulletSpeed, i, cItem) {
-        projManager.createProjectile( 
-            mousex+camera.x,
-            mousey+camera.y,
-            i*(Math.PI / 180),
-            cItem.color,
-            cItem.spread, 
-            cItem.lifespan, 
-            cItem.bulletSize, 
-            bulletSpeed*2, 
-            cItem.bulletsPerShot, 
-            cItem.acceleration
-        );
-    }
-    randBullet(bulletSpeed, cItem) {
-        let randX = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + player.x;
-        let randY = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + player.y;
-        let a = Math.atan2(mousey+camera.y - randY, mousex+camera.x - randX);
-        projManager.createProjectile( 
-            randX,
-            randY,
-            a,
-            cItem.color,
-            cItem.spread, 
-            cItem.lifespan, 
-            cItem.bulletSize, 
-            bulletSpeed*2, 
-            cItem.bulletsPerShot, 
-            cItem.acceleration
-        );
-    }
-    posBullet(x,y,angle,bulletSpeed,i,fx,cItem) {
-        // Step 1: Calculate the backward position
-        const backwardX = x - fx * Math.cos(angle + Math.PI);
-        const backwardY = y - fx * Math.sin(angle + Math.PI);
-
-        // Step 2: Add side offset (perpendicular to angle)
-        const spreadFactor = (i % 2 == 0 ? 1 : -1); // Alternate sides
-        const offsetX = 10* (Math.round(i/2)*2 + Math.round(Math.abs(fx)/25)) * spreadFactor * Math.cos(angle + Math.PI / 2);
-        const offsetY = 10* (Math.round(i/2)*2 + Math.round(Math.abs(fx)/25)) * spreadFactor * Math.sin(angle + Math.PI / 2);
-
-        const finalX = backwardX + offsetX;
-        const finalY = backwardY + offsetY;
-        let a = Math.atan2(mousey+camera.y - finalY, mousex+camera.x - finalX);
-        projManager.createProjectile(
-            finalX, 
-            finalY,
-            a, 
-            cItem.color,
-            cItem.spread, 
-            cItem.lifespan, 
-            cItem.bulletSize, 
-            bulletSpeed*2, 
-            cItem.bulletsPerShot, 
-            cItem.acceleration
-        );
-
-
-    }
-
-    colorChangeBullet(x,y,angle,bulletSpeed,c,cItem) {
-        projManager.createProjectile(
-            x, 
-            y, 
-            angle, 
-            ((c==0) ?"black":cItem.color),
-            cItem.spread, 
-            cItem.lifespan, 
-            cItem.bulletSize, 
-            bulletSpeed, 
-            cItem.bulletsPerShot, 
-            cItem.acceleration
-        );
     }
 }

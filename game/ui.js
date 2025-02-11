@@ -6,8 +6,8 @@ function drawUI() { //draw the screen
         drawText(itemManager.getName(), 20, ctx.canvas.height - 40);
         drawText(itemManager.getBullets() + "/" + itemManager.getMagSize(), 20, ctx.canvas.height - 20);
     } 
-    drawText("projectiles loaded: " + projManager.projectiles.length, ctx.canvas.width-200, textSize*2);
-    drawText("Mouse Pos: " + mousex + "," + mousey, ctx.canvas.width-200, textSize*3);
+    drawText("projectiles loaded: " + projManager.projectiles.length, ctx.canvas.width-250, textSize*2);
+    drawText("FPS: " + fps, ctx.canvas.width-200, textSize*3);
     drawText("WASD to move", ctx.canvas.width-200, ctx.canvas.height - 100);
     drawText("e to tp", ctx.canvas.width-200, ctx.canvas.height - 80);
     drawText("lmb to shoot", ctx.canvas.width-200, ctx.canvas.height - 60);
