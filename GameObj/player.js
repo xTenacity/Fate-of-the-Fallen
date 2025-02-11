@@ -12,10 +12,10 @@ class Player {
         this.yvelo = 0;
 
         this.color = "white";
-        //dash
+        //dash 
         this.isDashing = false;
         this.dashCooldown = 0; 
-        this.dashDelay = 50;
+        this.dashDelay = 50
         this.dashStrength = 2.5;
         //tp
         this.tpCooldown = 1;
@@ -93,8 +93,11 @@ class Player {
 
 
 
-        if (clicking) {
+        if (clicking && itemManager.items.length > 0) {
             itemManager.useItem();
+        }
+        if (itemManager.itemCooldown > 0) {
+            itemManager.itemCooldown--;
         }
     }
 

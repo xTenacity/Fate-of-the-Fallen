@@ -3,7 +3,7 @@ let canvas;
 let body;
 let ctx;
 
-const fps = 60;
+const fps = 120;
 let lastFrameTime = 0;
 
 let textSize = 20;

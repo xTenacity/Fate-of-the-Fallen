@@ -19,9 +19,6 @@ class ProjectileManager {
             acceleration));
     }
     updateProjectiles() {
-        if (itemManager.itemCooldown > 0) {
-            itemManager.itemCooldown--;
-        }
         let toBeRemoved = [];
         for (let i = 0; i < this.projectiles.length; i++) {
             this.projectiles[i].move();
@@ -29,8 +26,8 @@ class ProjectileManager {
                 toBeRemoved.push(i);
             }
         }
-        for (let i = 0; i < toBeRemoved.length; i++) {
-            this.projectiles.splice(toBeRemoved[i],1);
+        for (let i = toBeRemoved.length - 1; i >= 0; i--) {
+            this.projectiles.splice(toBeRemoved[i], 1);
         }
     }
 }
