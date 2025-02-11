@@ -65,7 +65,22 @@ function mousemove(event) {
 }
 function mousedown(event) {
     clicking = true;
+    if (itemManager.items.length > 0) {
+        let cItem = itemManager.items[itemManager.currentItem];
+        if (cItem.type == "Gun") {
+            if (cItem.bullets <= 0) {
+                /*var audio = new Audio("GameObj/items/sounds/" + cItem.emptyMagSfx + ".mp3");
+                audio.play();*/
+            }
+        }
+    }
 }
 function mouseup(event) {
     clicking = false;
+    if (itemManager.items.length > 0) {
+        let cItem = itemManager.items[itemManager.currentItem];
+        if (cItem.type == "Sword") {
+            cItem.cStage = 0;
+        }
+    }
 }

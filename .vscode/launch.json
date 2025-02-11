@@ -8,7 +8,8 @@
         "file": "c:\\Users\\haygs\\OneDrive\\Documents\\GitHub\\Fate\\index.html",
         "runtimeArgs": [
           "--disable-web-security", 
-          "--user-data-dir=${workspaceFolder}/.vscode/temp"
+          "--user-data-dir=${workspaceFolder}/.vscode/temp",
+          "-auto-open-devtools-for-tabs"
         ]
       }
     ]

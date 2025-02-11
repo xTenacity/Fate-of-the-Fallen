@@ -5,7 +5,6 @@
           "name": "Pistol",
           "type": "Gun",
           "color": "white",
-          "fx": "none",
           "damage": 15,
           "rateOfFire": 15,
           "bullets": 16,
@@ -18,33 +17,16 @@
           "recoil": 5,
           "lifespan": 30,
           "acceleration": 1,
-          "sfx": "gunshotLight"
-        },
-        {
-          "name": "Rune Save",
-          "type": "Gun",
-          "color": "yellow",
-          "fx": "none",
-          "damage": 20,
-          "rateOfFire": 20,
-          "bullets": 5,
-          "magSize": 5,
-          "bulletSpeed": 30,
-          "bulletsPerShot": 1,
-          "bulletDelay": false,
-          "bulletSize": 50,
-          "spread": 0,
-          "recoil": 10,
-          "lifespan": 50,
-          "acceleration": 1,
+
+
           "loadSfx": "gunLoad",
-          "shootSfx": "gunShotLight"
+          "shootSfx": "gunShotLight",
+          "emptyMagSfx": ""
         },
         {
           "name": "Shotgun",
           "type": "Gun",
           "color": "white",
-          "fx": "none",
           "damage": 10,
           "rateOfFire": 30,
           "bullets": 3,
@@ -64,7 +46,8 @@
           "name": "Singularity Rail Cannon",
           "type": "Gun",
           "color": "red",
-          "fx": "colorchange",
+          "fx": ["colorchange","blur"],
+          "color2": "black",
           "damage": 100,
           "rateOfFire": 50,
           "bullets": 1,
@@ -81,35 +64,15 @@
           "shootSfx": "gunShotHeavy"
         },
         {
-          "name": "Aquagun",
-          "type": "Gun",
-          "color": "blue",
-          "fx": "none",
-          "damage": 1,
-          "rateOfFire": 0.1,
-          "bullets": 100,
-          "magSize": 100,
-          "bulletSpeed": 12,
-          "bulletsPerShot": 5,
-          "bulletDelay": true,
-          "bulletSize": 5,
-          "spread": 1.5,
-          "recoil": 3,
-          "lifespan": 50,
-          "acceleration": 1,
-          "loadSfx": "gunLoad",
-          "shootSfx": "gunShotLight"
-        },
-        {
           "name": "Holy Striker",
           "type": "Gun",
           "color": "yellow",
-          "fx": -300,
+          "fx": ["blur",-1000],
           "damage": 10,
           "rateOfFire": 10,
-          "bullets": 10,
-          "magSize": 10,
-          "bulletSpeed": 50,
+          "bullets": 1000,
+          "magSize": 1000,
+          "bulletSpeed": 100,
           "bulletsPerShot": 14,
           "bulletDelay": false,
           "bulletSize": 10,
@@ -121,80 +84,95 @@
           "shootSfx": "gunShotLight"
         },
         {
-          "name": "Eviscerator",
+          "name": "beam blaster",
           "type": "Gun",
-          "color": "white",
-          "fx": 100,
+          "color": "orange",
+          "fx": ["colorchange","blur"],
+          "color2": "yellow",
           "damage": 100,
           "rateOfFire": 1,
-          "bullets": 10000,
-          "magSize": 10000,
-          "bulletSpeed": 50,
-          "bulletsPerShot": 20,
+          "bullets": 1000,
+          "magSize": 1000,
+          "bulletSpeed": 5,
+          "bulletsPerShot": 10,
           "bulletDelay": false,
           "bulletSize": 5,
-          "spread": 0,
-          "recoil": 10,
-          "lifespan": 30,
-          "acceleration": 1,
-          "loadSfx": "gunLoad",
-          "shootSfx": "gunShotHeavy"
-        },
-        {
-          "name": "andrew killa",
-          "type": "Gun",
-          "color": "green",
-          "fx": "random",
-          "damage": 100,
-          "rateOfFire": 0.1,
-          "bullets": 99999,
-          "magSize": 99999,
-          "bulletSpeed": 50,
-          "bulletsPerShot": 20,
-          "bulletDelay": false,
-          "bulletSize": 5,
-          "spread": 0,
+          "spread": 3,
           "recoil": 0,
           "lifespan": 30,
           "acceleration": 1,
-          "loadSfx": "gunLoadVoice",
-          "shootSfx": "gunShotVoice"
-        },
-        {
-          "name": "pulse bomb",
-          "type": "Gun",
-          "color": "white",
-          "fx": "cursorbomb",
-          "damage": 100,
-          "rateOfFire": 40,
-          "bullets": 3,
-          "magSize": 3,
-          "bulletSpeed": 5,
-          "bulletsPerShot": 360,
-          "bulletDelay": false,
-          "bulletSize": 5,
-          "spread": 0,
-          "recoil": 10,
-          "lifespan": 5,
-          "acceleration": 1,
-          "loadSfx": "gunLoad",
-          "shootSfx": "gunShotHeavy"
+          "loadSfx": "",
+          "shootSfx": ""
         }
       ],
-      "swords": [
+      "melee": [
         {
-          "name": "Short Sword",
+          "name": "Pocketknife",
+          "type": "Sword",
+          "attacks": [
+            {
+              "type": "slash",
+              "color": "white",
+              "size": 5,
+              "side": "left",
+              "delay": 10,
+              "damageMult": 1
+            },
+            {
+              "type": "slash",
+              "color": "white",
+              "size": 5,
+              "side": "right",
+              "delay": 10,
+              "damageMult": 1
+            }
+          ],
+          "cStage": 0,
           "damage": 20,
           "range": 1,
-          "swingSpeed": 1.5,
-          "durability": 100
+          "swingSpeed": 0.9
         },
         {
-          "name": "Long Sword",
-          "damage": 30,
-          "range": 1.5,
-          "swingSpeed": 1,
-          "durability": 80
+          "name": "Claymore",
+          "type": "Sword",
+          "attacks": [
+            {
+              "type": "slash",
+              "color": "white",
+              "size": 10,
+              "side": "left",
+              "delay": 15,
+              "damageMult": 1
+            },
+            {
+              "type": "slash",
+              "color": "white",
+              "size": 10,
+              "side": "right",
+              "delay": 15,
+              "damageMult": 1
+            },
+            {
+              "type": "slash",
+              "color": "white",
+              "size": 10,
+              "side": "left",
+              "delay": 15,
+              "damageMult": 1
+            },
+            {
+              "type": "slash",
+              "color": "red",
+              "size": 20,
+              "side": "right",
+              "delay": 15,
+              "damageMult": 5
+            }
+          ],
+          "cStage": 0,
+          "damage": 20,
+          "range": 1,
+          "swingSpeed": 0.6
         }
       ]
     },
