@@ -22,8 +22,16 @@ class ProjectileManager {
         let toBeRemoved = [];
         for (let i = 0; i < this.projectiles.length; i++) {
             this.projectiles[i].move();
-            if (this.projectiles[i].lifespan <= 0) {
-                toBeRemoved.push(i);
+            //console.log(this.projectiles[i].fx);
+            if (isNaN(this.projectiles[i].fx[0])) {
+                if (this.projectiles[i].x > screenWidth 
+                || this.projectiles[i].x < 0 
+                || this.projectiles[i].y > screenHeight 
+                || this.projectiles[i].y < 0) {
+                    toBeRemoved.push(i);
+                }
+            } else if (this.projectiles[i].lifespan <= 0) {
+                    toBeRemoved.push(i);
             }
         }
         for (let i = toBeRemoved.length - 1; i >= 0; i--) {
