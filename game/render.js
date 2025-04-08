@@ -13,10 +13,10 @@ function updateCamera() {
     camera.y += (targetY - camera.y) * lerpFactor;
 
     // Optional: Clamp the camera within the game world boundaries
-    const worldWidth = screenSize;  // Adjust to your actual game world width
-    const worldHeight = screenSize; // Adjust to your actual game world height
-    camera.x = Math.max(0, Math.min(camera.x, worldWidth - camera.width));
-    camera.y = Math.max(0, Math.min(camera.y, worldHeight - camera.height));
+    const worldWidth = screenWidth;  // Adjust to your actual game world width
+    const worldHeight = screenHeight; // Adjust to your actual game world height
+    camera.x = Math.max(0,Math.min(camera.x, worldWidth - camera.width));
+    camera.y = Math.max(-0,Math.min(camera.y, worldHeight - camera.height));
     
     if (camera.shakeFactor > 0) {
         // Apply random offset based on shakeIntensity
@@ -35,16 +35,24 @@ function updateCamera() {
 }
 
 function drawBG() {
-    ctx.fillStyle = "black";
+    switch(theme){
+        case "default": ctx.fillStyle = "white"; break;
+        case "dark": ctx.fillStyle = "black";
+    }
+    
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawPlayer() {
     if (player.isDashing) {
-        //trail = [];
         drawFadingTrail();
     }
-    ctx.fillStyle = player.color;
+
+    switch(theme) {
+        case "default": ctx.fillStyle = "black"; break;
+        case "dark": ctx.fillStyle = "white";
+    }
+    
     ctx.fillRect(
         player.x - camera.x - (player.size*camera.zoom) / 2,
         player.y - camera.y - (player.size*camera.zoom) / 2,
@@ -57,7 +65,16 @@ function drawProjectiles() {
     for (let projectile in projManager.projectiles) {
         ctx.save();
         let proj = projManager.projectiles[projectile];
-        ctx.fillStyle = proj.color;
+
+        switch(theme){
+            case "default": ctx.fillStyle = "black"; break;
+            case "dark": ctx.fillStyle = "white";
+        }
+        if (proj.color != "white" && proj.color != "black") {
+            ctx.fillStyle = proj.color;
+        }
+
+
         ctx.translate(proj.x - camera.x, proj.y - camera.y);
         ctx.rotate(proj.dir);
 
@@ -224,8 +241,13 @@ function drawFadingTrail() {
     // Start with a high alpha and decrease it
     let playerAlpha = 1.0;
 
+    
     for (let i = 0; i < 20; i++) {
-        ctx.fillStyle = `rgba(255, 255, 255, ${playerAlpha})`;
+        
+        switch(theme) {
+            case "default": ctx.fillStyle = `rgba(0, 0, 0, ${playerAlpha})`; break;
+            case "dark": ctx.fillStyle = `rgba(255, 255, 255, ${playerAlpha})`;
+        }
         ctx.fillRect(
             player.x - player.xvelo*(i/4) - camera.x - (player.size*camera.zoom) / 2,
             player.y - player.yvelo*(i/4) - camera.y - (player.size*camera.zoom) / 2,
@@ -238,33 +260,46 @@ function drawFadingTrail() {
 
 
 function drawGrid() {
-    ctx.strokeStyle = `rgba(255, 0, 0, 0.5)`;// Color of the grid lines
+    switch(theme){
+        case "default": ctx.strokeStyle = `rgba(0, 0, 0, 0.5)`; break;
+        case "dark": ctx.strokeStyle = 'rgba(255,0,0,0.5)'; 
+    }
+    
     ctx.lineWidth = 1; // Thickness of the grid lines
 
     // Calculate where to start and end the grid based on the camera position
-    const startX = -camera.x % player.size;
-    const startY = -camera.y % player.size;
+    let startX = Math.floor(camera.x / (player.size * camera.zoom)) * (player.size * camera.zoom);
+    let startY = Math.floor(camera.y / (player.size * camera.zoom)) * (player.size * camera.zoom);
 
-    // Draw vertical lines
-    for (let x = startX; x < canvas.width; x += player.size * camera.zoom) {
+    // Set end positions, limited to world bounds
+    let endX = screenWidth;
+    let endY = screenHeight;
+
+    // Draw vertical lines within world bounds
+    for (let x = startX; x < endX+1; x += map.currentRoom.tileSize * camera.zoom) {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.moveTo(x - camera.x, 0 - camera.y);
+        ctx.lineTo(x - camera.x, screenHeight - camera.y);
         ctx.stroke();
     }
 
-    // Draw horizontal lines
-    for (let y = startY; y < canvas.height; y += player.size * camera.zoom) {
+    // Draw horizontal lines within world bounds
+    for (let y = startY; y < endY+1; y += map.currentRoom.tileSize * camera.zoom) {
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+        ctx.moveTo(0 - camera.x, y - camera.y);
+        ctx.lineTo(screenWidth - camera.x, y - camera.y);
         ctx.stroke();
     }
+}
+
+function drawMap() {
+    
 }
 
 function render() {
     updateCamera();
     drawBG();
+    drawMap();
     drawGrid();
     drawProjectiles();
     drawSlashes();

@@ -4,7 +4,9 @@ function drawUI() { //draw the screen
     drawText("dash: " + player.dashCooldown + "/" + player.dashDelay, 20, textSize*4);
     if (itemManager.getItem()) {
         drawText(itemManager.getName(), 20, ctx.canvas.height - 40);
-        drawText(itemManager.getBullets() + "/" + itemManager.getMagSize(), 20, ctx.canvas.height - 20);
+        if (itemManager.getType() == "gun") {
+            drawText(itemManager.getBullets() + "/" + itemManager.getMagSize(), 20, ctx.canvas.height - 20);
+        }
     } 
     drawText("projectiles loaded: " + projManager.projectiles.length, ctx.canvas.width-250, textSize*2);
     drawText("FPS: " + fps, ctx.canvas.width-200, textSize*3);
@@ -13,10 +15,14 @@ function drawUI() { //draw the screen
     drawText("lmb to shoot", ctx.canvas.width-200, ctx.canvas.height - 60);
     drawText("t to switch weapons", ctx.canvas.width-200, ctx.canvas.height - 40);
     drawText("r to reload", ctx.canvas.width-200, ctx.canvas.height - 20);
+    drawText(screenWidth + ", " + screenHeight, 100, 100);
 }
 
 function drawText(message,x,y) {
-    ctx.fillStyle = "white";
+    switch(theme) {
+        case "default": ctx.fillStyle = "black"; break;
+        case "dark": ctx.fillStyle = "white";
+    }
     const offsetX = (Math.random() - 0.5) * 2 * camera.shakeFactor;
     const offsetY = (Math.random() - 0.5) * 2 * camera.shakeFactor;
     ctx.fillText(message,x + offsetX,y + offsetY);
@@ -24,7 +30,10 @@ function drawText(message,x,y) {
 
 function drawCrosshair() {
     let a = 1;
-    ctx.fillStyle = "white";
+    switch(theme) {
+        case "default": ctx.fillStyle = "black"; break;
+        case "dark": ctx.fillStyle = "white";
+    }
     
     if (itemManager.itemCooldown > 0) ctx.fillStyle = "lightgrey", a*=2;
     

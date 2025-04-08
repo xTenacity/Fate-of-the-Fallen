@@ -3,6 +3,36 @@ class ItemManager {
         this.items = [];
         this.currentItem = 0;
         this.itemCooldown = 0;
+        this.loadData();
+    }
+
+    async loadData() {
+        fetch("GameObj/items/items.json")  // Fetch the JSON file
+        .then(response => response.json())  // Parse the JSON response
+        .then(data => {
+          const items = data.items;  // Get the rooms array
+          const weapons = items.weapons;
+          const guns = weapons.guns;
+          for (const gun of guns) {
+            this.addItem(gun);
+            console.log("[" + gun.name + "] loaded");
+          };
+          console.log("All guns have been loaded!");
+          const melees = weapons.melee;
+          for (const melee of melees) {
+            this.addItem(melee);
+            console.log("[" + melee.name + "] loaded");
+          };
+          console.log("All melee weapons have been loaded!");
+          const consumables = items.consumables;
+          for (const consumable of consumables) {
+            this.addItem(consumable);
+            console.log("[" + consumable.name + "] loaded");
+          };
+          console.log("All consumables have been loaded!");
+          console.log("All items have been loaded!");
+        })
+        .catch(error => console.error('Error loading item data:', error));
     }
     
     //SETTERS
@@ -14,6 +44,9 @@ class ItemManager {
             this.currentItem++;
         } else {
             this.currentItem = 0;
+        }
+        if (this.items.length > 0 && this.getType() == "Sword") {
+            this.items[this.currentItem].cStage = 0;
         }
     }
     useItem() {
@@ -49,7 +82,7 @@ class ItemManager {
                 cItem.cStage++;
             } else {
                 cItem.cStage = 0;
-            }
+            }   
         }
     }
 //GUN SPECIFIC METHODS

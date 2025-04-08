@@ -7,16 +7,16 @@ class Player {
         this.x = x;
         this.y = y;
         this.size = 30;
-        this.speed = 15;
+        this.speed = 8;
         this.xvelo = 0;
         this.yvelo = 0;
 
-        this.color = "white";
+        this.color = "black";
         //dash 
         this.isDashing = false;
         this.dashCooldown = 0; 
         this.dashDelay = 50
-        this.dashStrength = 2.5;
+        this.dashStrength = 1;
         //tp
         this.tpCooldown = 1;
         this.tpDelay = 0;
@@ -82,8 +82,8 @@ class Player {
         this.x += this.xvelo;
         this.y += this.yvelo;
 
-        this.x = Math.min(Math.max(this.x, 0+this.size/2), screenSize-this.size/2);
-        this.y = Math.min(Math.max(this.y, 0+this.size/2), screenSize-this.size/2);
+        this.x = Math.min(Math.max(this.x, this.size / 2), screenWidth - this.size / 2);
+        this.y = Math.min(Math.max(this.y, this.size / 2), screenHeight - this.size / 2);
 
 
 
