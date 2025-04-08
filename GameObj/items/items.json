@@ -1,4 +1,5 @@
 {
+  "items": {
     "weapons": {
       "guns": [
         {
@@ -112,7 +113,7 @@
           "attacks": [
             {
               "type": "slash",
-              "color": "white",
+              "color": "black",
               "size": 5,
               "side": "left",
               "delay": 10,
@@ -120,7 +121,7 @@
             },
             {
               "type": "slash",
-              "color": "white",
+              "color": "black",
               "size": 5,
               "side": "right",
               "delay": 10,
@@ -138,7 +139,7 @@
           "attacks": [
             {
               "type": "slash",
-              "color": "white",
+              "color": "red",
               "size": 10,
               "side": "left",
               "delay": 15,
@@ -146,7 +147,7 @@
             },
             {
               "type": "slash",
-              "color": "white",
+              "color": "green",
               "size": 10,
               "side": "right",
               "delay": 15,
@@ -154,7 +155,7 @@
             },
             {
               "type": "slash",
-              "color": "white",
+              "color": "orange",
               "size": 10,
               "side": "left",
               "delay": 15,
@@ -162,7 +163,7 @@
             },
             {
               "type": "slash",
-              "color": "red",
+              "color": "blue",
               "size": 20,
               "side": "right",
               "delay": 15,
@@ -191,3 +192,4 @@
       }
     ]
   }
+}

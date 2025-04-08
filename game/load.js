@@ -17,22 +17,16 @@ let playing = true;
 let pKey = [false, false, false, false];
 let camPos = "player";
 
-
-
-
-
-let screenSize = 10000;
+let screenHeight = 1000;
+let screenWidth = 1000;
 
 document.addEventListener('DOMContentLoaded', function() { //load everything
     canvas = document.createElement('canvas');
     canvas.id = "CursorLayer";
     
-    canvas.height = 500;
-    canvas.width = 500;
-    canvas.width = window.screen.width-50;
-    canvas.height = window.screen.height-100;
+    canvas.width = window.screen.width-10;
+    canvas.height = window.screen.height-125;
     canvas.style.top = "0px";
-    //canvas.style.left = ((window.screen.width / 2) - (canvas.width / 2)) + "px";
     canvas.style.left = "0px";
     canvas.style.position = "absolute";
     canvas.style.borderWidth = "0px";
@@ -44,7 +38,9 @@ document.addEventListener('DOMContentLoaded', function() { //load everything
     
     camera.width = ctx.canvas.width;
     camera.height = ctx.canvas.height;
-    
+    camera.x = -camera.width/2;
+    camera.y = -camera.height/2;
+
     
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);

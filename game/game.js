@@ -1,18 +1,11 @@
-const player = new Player(200, 200);
-const map = new Map();
+const player = new Player(25, 5);
+let map = new Map("pride","room1");
+let currentRoom = "room1";
 const projManager = new ProjectileManager();
 const slashManager = new SlashManager();
 const itemManager = new ItemManager();
 const camera = new Camera();
-
-fetch("GameObj/items/items.json")
-    .then(response => response.json())
-    .then(data => {
-        // Iterate over all guns and add them to the item manager
-        //data.weapons.guns.forEach(item => itemManager.addItem(item));
-        data.weapons.melee.forEach(item => itemManager.addItem(item));
-    })
-    .catch(error => console.error("Error loading item data:", error));
+let theme = "default";
 
 function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
