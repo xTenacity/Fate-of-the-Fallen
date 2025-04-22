@@ -7,7 +7,7 @@ class ProjectileManager {
         return (Math.random() / s - Math.random() / s) * shots;
     }
 //projManager.createProjectile(x, y, angle, cItem.spread, cItem.recoil, cItem.lifespan, cItem.bulletSize, cItem.bulletsPerShot);
-    createProjectile(x, y, dir, color, spread, lifespan, bulletSize, bulletSpeed, bulletsPerShot, acceleration) {
+    createProjectile(x, y, dir, color, spread, lifespan, bulletSize, bulletSpeed, bulletsPerShot, acceleration, despawnOnCollision) {
         this.projectiles.push(new Projectile(
             x, 
             y, 
@@ -16,14 +16,14 @@ class ProjectileManager {
             bulletSize, 
             bulletSpeed, 
             lifespan, 
-            acceleration));
+            acceleration,
+            despawnOnCollision));
     }
     updateProjectiles() {
         let toBeRemoved = [];
         for (let i = 0; i < this.projectiles.length; i++) {
             this.projectiles[i].move();
-            //console.log(this.projectiles[i].fx);
-            if (isNaN(this.projectiles[i].fx[0])) {
+            if (this.projectiles[i].despawnOnCollision) {
                 if (this.projectiles[i].x > screenWidth 
                 || this.projectiles[i].x < 0 
                 || this.projectiles[i].y > screenHeight 

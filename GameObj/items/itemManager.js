@@ -144,7 +144,6 @@ class ItemManager {
                         const spreadFactor = (i % 2 == 0 ? 1 : -1); // Alternate sides
                         const offsetX = 10 * (Math.round(i/2)*2 + Math.round(Math.abs(effect)/25)) * spreadFactor * Math.cos(bulletAngle + Math.PI / 2);
                         const offsetY = 10 * (Math.round(i/2)*2 + Math.round(Math.abs(effect)/25)) * spreadFactor * Math.sin(bulletAngle + Math.PI / 2);
-
                         bulletX = backwardX + offsetX;
                         bulletY = backwardY + offsetY;
                         bulletAngle = Math.atan2(mousey+camera.y - bulletY, mousex+camera.x - bulletX);
@@ -169,7 +168,8 @@ class ItemManager {
                         cItem.bulletSize,
                         bulletSpeed,
                         cItem.bulletsPerShot,
-                        cItem.acceleration
+                        cItem.acceleration,
+                        cItem.despawnOnCollision
                     );
                 } else {
                     projManager.createProjectile(
@@ -182,7 +182,8 @@ class ItemManager {
                         cItem.bulletSize,
                         bulletSpeed,
                         cItem.bulletsPerShot,
-                        cItem.acceleration
+                        cItem.acceleration,
+                        cItem.despawnOnCollision
                     );
                 }
             }
@@ -199,7 +200,8 @@ class ItemManager {
                     cItem.bulletSize,
                     bulletSpeed,
                     cItem.bulletsPerShot,
-                    cItem.acceleration
+                    cItem.acceleration,
+                    cItem.despawnOnCollision
                 );
             }
         }
