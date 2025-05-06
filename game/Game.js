@@ -1,23 +1,11 @@
-const player = new Player(200, 200);
-const map = new Map();
+const player = new Player(100, 100);
+let map = new Map("pride","room1");
+let currentRoom = "room1";
 const projManager = new ProjectileManager();
+const slashManager = new SlashManager();
 const itemManager = new ItemManager();
 const camera = new Camera();
-
-fetch("GameObj/items/items.json")
-.then(response => response.json())
-.then(data => {
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Pistol"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Rune Save"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Shotgun"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Singularity Rail Cannon"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Aquagun"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Holy Striker"));
-    //itemManager.addItem(data.weapons.guns.find(item => item.name === "Eviscerator"));
-    itemManager.addItem(data.weapons.guns.find(item => item.name === "andrew killa"));
-    itemManager.addItem(data.weapons.guns.find(item => item.name === "pulse bomb"));
-})
-.catch(error => console.error("Error loading item data:", error));
+let theme = "default";
 
 function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
@@ -30,5 +18,6 @@ function gameLoop(currentTime) {
 function updateScreen() {
     player.move();
     projManager.updateProjectiles();
+    slashManager.updateSlashes();
     render();
 }
