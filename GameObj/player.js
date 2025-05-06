@@ -58,10 +58,10 @@ class Player {
                 this.xvelo = pKey[0] || pKey[2] ? normalize : this.speed;
             }
             if (pKey[0] && pKey[2]) {
-                player.yvelo = 0;
+                this.yvelo = 0;
             } 
             if (pKey[1] && pKey[3]) {
-                player.xvelo = 0;
+                this.xvelo = 0;
             }
         }
 

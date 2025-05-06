@@ -19,7 +19,7 @@ class Map {
         .catch(error => console.error('Error loading rooms:', error));
     }
     async loadRoom(roomID) {
-        console.log("Loading " + roomID);
+        console.log("Loading " + roomID + "...");
         for (var i = 0; i < this.rooms.length; i++) {
             if (this.rooms[i].roomID == roomID) {
                 console.log("Loading " + roomID + " was successful!"); 
