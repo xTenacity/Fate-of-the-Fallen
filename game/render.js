@@ -293,7 +293,33 @@ function drawGrid() {
 }
 
 function drawMap() {
+    const room = map.currentRoom;
+    const tileSize = room.tileSize;
+    const rows = room.roomHeight;
+    const cols = room.roomWidth;
+    let tiles = room.layers.tileMap;
     
+    for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) { 
+            let tile = tiles[y*cols + x];
+
+
+            if (tile === 0) continue;
+
+            switch(theme) {
+                case "default": ctx.fillStyle = "black"; break;
+                case "dark": ctx.fillStyle = "white";
+            }
+
+            // Draw the tile adjusted for camera position and zoom
+            ctx.fillRect(
+                x * tileSize * camera.zoom - camera.x,
+                y * tileSize * camera.zoom - camera.y,
+                tileSize * camera.zoom,
+                tileSize * camera.zoom
+            );
+        }
+    }
 }
 
 function render() {
