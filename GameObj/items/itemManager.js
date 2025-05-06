@@ -125,19 +125,16 @@ class ItemManager {
             const fxList = Array.isArray(cItem.fx) ? cItem.fx : [cItem.fx]; // Ensure fx is an array
             for (let i = 0; i < cItem.bulletsPerShot; i++) {
                 let bulletSpeed = cItem.bulletSpeed + (cItem.bulletDelay ? i : 0);
-                let effectApplied = false;
 
                 let bulletX = x - (cItem.bulletSize/2);
                 let bulletY = y - (cItem.bulletSize/2);
                 let bulletAngle = angle;
                 let colorchange = false;
 
-                /*if (effect == "colorchange")*/
                 for (let effect of fxList) {
                     if (effect == "cursor") {
                         bulletX = mousex + camera.x;
                         bulletY = mousey + camera.y;
-                        effectApplied = true;
                     } if (!isNaN(effect)) { 
                         const backwardX = bulletX - effect * Math.cos(bulletAngle + Math.PI);
                         const backwardY = bulletY - effect * Math.sin(bulletAngle + Math.PI);
@@ -147,12 +144,10 @@ class ItemManager {
                         bulletX = backwardX + offsetX;
                         bulletY = backwardY + offsetY;
                         bulletAngle = Math.atan2(mousey+camera.y - bulletY, mousex+camera.x - bulletX);
-                        effectApplied = true;
                     } else if (effect == "random") {
                         bulletX = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + x;
                         bulletY = ((Math.random()>0.5)?1:-1) * Math.random()*1000 + y;
-                        bulletAngle = Math.atan2(mousey+camera.y - bullety, mousex+camera.x - bulletX);
-                        effectApplied = true;
+                        bulletAngle = Math.atan2(mousey+camera.y - bulletY, mousex+camera.x - bulletX);
                     } else if (effect == "colorchange") {
                         colorchange = true;
                     }

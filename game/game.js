@@ -1,4 +1,4 @@
-const player = new Player(25, 5);
+const player = new Player(100, 100);
 let map = new Map("pride","room1");
 let currentRoom = "room1";
 const projManager = new ProjectileManager();
